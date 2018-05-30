@@ -1,3 +1,16 @@
+## Forked version which supports Google Chrome WorkSpace browser editing
+
+Add to package.json like so
+```npm
+yarn add https://github.com/lipemat/postcss-loader.git
+```
+Loaders should be added with postcss-loader after style-loader and css-loader like so
+
+```js
+style-loader!css-loader?importLoaders=1&sourceMap=1!postcss-loader?sourceMap=1
+```
+
+
 [![npm][npm]][npm-url]
 [![node][node]][node-url]
 [![deps][deps]][deps-url]
@@ -22,6 +35,8 @@
   <h1>PostCSS Loader</h1>
   <p>Loader for <a href="http://webpack.js.org/">webpack</a> to process CSS with <a href="http://postcss.org/">PostCSS</a></p>
 </div>
+
+
 
 <h2 align="center">Install</h2>
 
