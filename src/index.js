@@ -1,46 +1,29 @@
-'use strict'
-
 const path = require('path')
 
-const loaderUtils = require('loader-utils')
-
-const parseOptions = require('./options')
+const { getOptions } = require('loader-utils')
 const validateOptions = require('schema-utils')
 
 const postcss = require('postcss')
 const postcssrc = require('postcss-load-config')
 
-const SyntaxError = require('./Error')
+const Warning = require('./Warning.js')
+const SyntaxError = require('./Error.js')
+const parseOptions = require('./options.js')
 
 /**
- * PostCSS Loader
+ * **PostCSS Loader**
  *
- * > Loads && processes CSS with [PostCSS](https://github.com/postcss/postcss)
- *
- * @author Andrey Sitnik (@ai) <andrey@sitnik.ru>
- *
- * @license MIT
- * @version 2.0.0
- *
- * @requires path
- *
- * @requires loader-utils
- * @requires schema-utils
- *
- * @requires postcss
- * @requires postcss-load-config
- *
- * @requires Error
+ * Loads && processes CSS with [PostCSS](https://github.com/postcss/postcss)
  *
  * @method loader
  *
- * @param  {String} css Source
- * @param  {Object} map Source Map
+ * @param {String} css Source
+ * @param {Object} map Source Map
  *
- * @return {cb} cb      Result
+ * @return {cb} cb Result
  */
-module.exports = function loader (css, map, meta) {
-  const options = Object.assign({}, loaderUtils.getOptions(this))
+function loader (css, map, meta) {
+  const options = Object.assign({}, getOptions(this))
 
   validateOptions(require('./options.json'), options, 'PostCSS Loader')
 
@@ -90,20 +73,29 @@ module.exports = function loader (css, map, meta) {
       }
     }
 
-    rc.ctx.webpack = this;
+    rc.ctx.webpack = this
 
-    return postcssrc(rc.ctx, rc.path, { argv: false })
+    return postcssrc(rc.ctx, rc.path)
   }).then((config) => {
-    if (!config) config = {}
+    if (!config) {
+      config = {}
+    }
 
-    if (config.file) this.addDependency(config.file)
+    if (config.file) {
+      this.addDependency(config.file)
+    }
 
     // Disable override `to` option from `postcss.config.js`
-    if (config.options.to) delete config.options.to
+    if (config.options.to) {
+      delete config.options.to
+    }
     // Disable override `from` option from `postcss.config.js`
-    if (config.options.from) delete config.options.from
+    if (config.options.from) {
+      delete config.options.from
+    }
 
     let plugins = config.plugins || []
+
     let options = Object.assign({
       from: file,
       map: sourceMap
@@ -137,20 +129,30 @@ module.exports = function loader (css, map, meta) {
       css = this.exec(css, this.resource)
     }
 
-    if (sourceMap && typeof map === 'string') map = JSON.parse(map)
-    if (sourceMap && map) options.map.prev = map
+    if (sourceMap && typeof map === 'string') {
+      map = JSON.parse(map)
+    }
+
+    if (sourceMap && map) {
+      options.map.prev = map
+    }
 
     return postcss(plugins)
       .process(css, options)
       .then((result) => {
-        result.warnings().forEach((msg) => this.emitWarning(msg.toString()))
+        let { css, map, root, processor, messages } = result
 
-        result.messages.forEach((msg) => {
-          if (msg.type === 'dependency') this.addDependency(msg.file)
+        result.warnings().forEach((warning) => {
+          this.emitWarning(new Warning(warning))
         })
 
-        css = result.css
-        map = result.map ? result.map.toJSON() : null
+        messages.forEach((msg) => {
+          if (msg.type === 'dependency') {
+            this.addDependency(msg.file)
+          }
+        })
+
+        map = map ? map.toJSON() : null
 
          if (map) {
           map.file = path.resolve(map.file)
@@ -169,19 +171,27 @@ module.exports = function loader (css, map, meta) {
 		  })
         }
 
-        if (!meta) meta = {}
+        if (!meta) {
+          meta = {}
+        }
 
-        meta.ast = { 'type': 'postcss', root: result.root }
-        meta.messages = result.messages
+        const ast = {
+          type: 'postcss',
+          version: processor.version,
+          root
+        }
+
+        meta.ast = ast
+        meta.messages = messages
 
         if (this.loaderIndex === 0) {
           /**
            * @memberof loader
            * @callback cb
            *
-           * @param {Object} null   Error
-           * @param {String} result Result (JS Module)
-           * @param {Object} map    Source Map
+           * @param {Object} null Error
+           * @param {String} css  Result (JS Module)
+           * @param {Object} map  Source Map
            */
           cb(null, `module.exports = ${JSON.stringify(css)}`, map)
 
@@ -201,8 +211,34 @@ module.exports = function loader (css, map, meta) {
         return null
       })
   }).catch((err) => {
-    if (err.file) this.addDependency(err.file)
+    if (err.file) {
+      this.addDependency(err.file)
+    }
 
-    return err.name === 'CssSyntaxError' ? cb(new SyntaxError(err)) : cb(err)
+    return err.name === 'CssSyntaxError'
+      ? cb(new SyntaxError(err))
+      : cb(err)
   })
 }
+
+/**
+ * @author Andrey Sitnik (@ai) <andrey@sitnik.ru>
+ *
+ * @license MIT
+ * @version 3.0.0
+ *
+ * @module postcss-loader
+ *
+ * @requires path
+ *
+ * @requires loader-utils
+ * @requires schema-utils
+ *
+ * @requires postcss
+ * @requires postcss-load-config
+ *
+ * @requires ./options.js
+ * @requires ./Warning.js
+ * @requires ./SyntaxError.js
+ */
+module.exports = loader
