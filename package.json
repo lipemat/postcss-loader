@@ -1,6 +1,6 @@
 {
   "name": "@lipemat/postcss-loader",
-  "version": "3.0.0",
+  "version": "3.0.1",
   "description": "PostCSS loader for webpack",
   "main": "src/index.js",
   "files": [
