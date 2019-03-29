@@ -2,7 +2,7 @@
 
 Add to package.json like so
 ```npm
-yarn add https://github.com/lipemat/postcss-loader.git
+yarn add @lipemat/postcss-loader
 ```
 Loaders should be added with postcss-loader after style-loader and css-loader like so
 
@@ -36,13 +36,6 @@ style-loader!css-loader?importLoaders=1&sourceMap=1!postcss-loader?sourceMap=1
   <p>Loader for <a href="https://webpack.js.org/">webpack</a> to process CSS with <a href="https://postcss.org/">PostCSS</a></p>
 </div>
 
-
-
-<h2 align="center">Install</h2>
-
-```bash
-npm i -D postcss-loader
-```
 
 <h2 align="center">Usage</h2>
 
@@ -85,7 +78,7 @@ Config lookup starts from `path.dirname(file)` and walks the file tree upwards u
 |– package.json
 ```
 
-After setting up your `postcss.config.js`, add `postcss-loader` to your `webpack.config.js`. You can use it standalone or in conjunction with `css-loader` (recommended). Use it **after** `css-loader` and `style-loader`, but **before** other preprocessor loaders like e.g `sass|less|stylus-loader`, if you use any.
+After setting up your `postcss.config.js`, add `@lipemat/postcss-loader` to your `webpack.config.js`. You can use it standalone or in conjunction with `css-loader` (recommended). Use it **after** `css-loader` and `style-loader`, but **before** other preprocessor loaders like e.g `sass|less|stylus-loader`, if you use any.
 
 **`webpack.config.js`**
 ```js
@@ -94,7 +87,7 @@ module.exports = {
     rules: [
       {
         test: /\.css$/,
-        use: [ 'style-loader', 'postcss-loader' ]
+        use: [ 'style-loader', '@lipemat/postcss-loader' ]
       }
     ]
   }
@@ -113,7 +106,7 @@ module.exports = {
         use: [
           'style-loader',
           { loader: 'css-loader', options: { importLoaders: 1 } },
-          'postcss-loader'
+          '@lipemat/postcss-loader'
         ]
       }
     ]
@@ -144,7 +137,7 @@ If you use JS styles without the [`postcss-js`][postcss-js] parser, add the `exe
   use: [
     'style-loader',
     { loader: 'css-loader', options: { importLoaders: 1 } },
-    { loader: 'postcss-loader', options: { parser: 'sugarss', exec: true } }
+    { loader: '@lipemat/postcss-loader', options: { parser: 'sugarss', exec: true } }
   ]
 }
 ```
@@ -167,7 +160,7 @@ You can manually specify the path to search for your config (`postcss.config.js`
 **`webpack.config.js`**
 ```js
 {
-  loader: 'postcss-loader',
+  loader: '@lipemat/postcss-loader',
   options: {
     config: {
       path: 'path/to/.config/' ✅
@@ -204,7 +197,7 @@ module.exports = ({ file, options, env }) => ({
 **`webpack.config.js`**
 ```js
 {
-  loader: 'postcss-loader',
+  loader: '@lipemat/postcss-loader',
   options: {
     config: {
       ctx: {
@@ -221,7 +214,7 @@ module.exports = ({ file, options, env }) => ({
 **`webpack.config.js`**
 ```js
 {
-  loader: 'postcss-loader',
+  loader: '@lipemat/postcss-loader',
   options: {
     ident: 'postcss',
     plugins: (loader) => [
@@ -251,7 +244,7 @@ module.exports = ({ file, options, env }) => ({
   test: /\.sss$/,
   use: [
     ...,
-    { loader: 'postcss-loader', options: { parser: 'sugarss' } }
+    { loader: '@lipemat/postcss-loader', options: { parser: 'sugarss' } }
   ]
 }
 ```
@@ -264,7 +257,7 @@ module.exports = ({ file, options, env }) => ({
   test: /\.css$/,
   use: [
     ...,
-    { loader: 'postcss-loader', options: { syntax: 'sugarss' } }
+    { loader: '@lipemat/postcss-loader', options: { syntax: 'sugarss' } }
   ]
 }
 ```
@@ -277,7 +270,7 @@ module.exports = ({ file, options, env }) => ({
   test: /\.css$/,
   use: [
     ...,
-    { loader: 'postcss-loader', options: { stringifier: 'midas' } }
+    { loader: '@lipemat/postcss-loader', options: { stringifier: 'midas' } }
   ]
 }
 ```
@@ -293,7 +286,7 @@ Enables source map support, `postcss-loader` will use the previous source map gi
   use: [
     { loader: 'style-loader', options: { sourceMap: true } },
     { loader: 'css-loader', options: { sourceMap: true } },
-    { loader: 'postcss-loader', options: { sourceMap: true } },
+    { loader: '@lipemat/postcss-loader', options: { sourceMap: true } },
     { loader: 'sass-loader', options: { sourceMap: true } }
   ]
 }
@@ -307,7 +300,7 @@ within the CSS directly as an annotation comment.
 **`webpack.config.js`**
 ```js
 {
-  loader: 'postcss-loader',
+  loader: '@lipemat/postcss-loader',
   options: {
     sourceMap: 'inline'
   }
@@ -332,7 +325,7 @@ within the CSS directly as an annotation comment.
     'style-loader',
     'css-loader',
     {
-      loader: 'postcss-loader',
+      loader: '@lipemat/postcss-loader',
       options: {
         ident: 'postcss',
         plugins: [
@@ -356,7 +349,7 @@ within the CSS directly as an annotation comment.
     'style-loader',
     'css-loader',
     {
-      loader: 'postcss-loader',
+      loader: '@lipemat/postcss-loader',
       options: {
         ident: 'postcss',
         plugins: [
@@ -384,7 +377,7 @@ either add the css-loader’s [`importLoaders`] option.
   use: [
     'style-loader',
     { loader: 'css-loader', options: { modules: true, importLoaders: 1 } },
-    'postcss-loader'
+    '@lipemat/postcss-loader'
   ]
 }
 ```
@@ -409,7 +402,7 @@ If you want to process styles written in JavaScript, use the [postcss-js] parser
   use: [
     'style-loader',
     { loader: 'css-loader', options: { importLoaders: 2 } },
-    { loader: 'postcss-loader', options: { parser: 'postcss-js' } },
+    { loader: '@lipemat/postcss-loader', options: { parser: 'postcss-js' } },
     'babel-loader'
   ]
 }
@@ -456,7 +449,7 @@ module.exports = {
         use: [
           devMode ? 'style-loader' : MiniCssExtractPlugin.loader,
           'css-loader',
-          'postcss-loader'
+          '@lipemat/postcss-loader'
         ]
       }
     ]
