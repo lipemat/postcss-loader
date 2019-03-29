@@ -13,3 +13,4 @@ jest
 coverage
 jsdoc-api
 node_modules
+.idea

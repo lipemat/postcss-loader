@@ -1,5 +1,5 @@
 {
-  "name": "postcss-loader",
+  "name": "@lipemat/postcss-loader",
   "version": "3.0.0",
   "description": "PostCSS loader for webpack",
   "main": "src/index.js",
@@ -40,9 +40,9 @@
     "webpack",
     "webpack-loader"
   ],
-  "author": "Andrey Sitnik <andrey@sitnik.ru>",
+  "author": "Mat Lipe",
   "repository": "https://github.com/lipemat/postcss-loader.git",
-  "bugs": "https://github.com/postcss/lipemat-loader/issues",
+  "bugs": "https://github.com/lipemat/postcss-loader/issues",
   "homepage": "https://github.com/lipemat/postcss-loader#readme",
   "license": "MIT"
 }
