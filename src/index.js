@@ -32,6 +32,8 @@ function loader (css, map, meta) {
 
   const sourceMap = options.sourceMap
 
+	const doNotPassMeta = options.doNotPassMeta
+
   Promise.resolve().then(() => {
     const length = Object.keys(options)
       .filter((option) => {
@@ -175,14 +177,24 @@ function loader (css, map, meta) {
           meta = {}
         }
 
-        const ast = {
-          type: 'postcss',
-          version: processor.version,
-          root
-        }
+		  /**
+		   * Hack to prevent css-loader from breaking sourcemaps.
+		   *
+		   * @see https://github.com/webpack-contrib/css-loader/commit/1dad1fbce3f4f56b85767e62d35ac55260232dc6#diff-7c7d4918b118d27d18538f53b8155e88R54
+		   *
+		   */
+		  if ( doNotPassMeta ) {
+			  meta = {};
+		  } else {
+			  const ast = {
+				  type: 'postcss',
+				  version: processor.version,
+				  root
+			  }
 
-        meta.ast = ast
-        meta.messages = messages
+			  meta.ast = ast
+			  meta.messages = messages
+		  }
 
         if (this.loaderIndex === 0) {
           /**
