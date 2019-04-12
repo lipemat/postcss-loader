@@ -40,9 +40,6 @@
     },
     "sourceMap": {
       "type": [ "string", "boolean" ]
-    },
-    "doNotPassMeta": {
-      "type": [ "boolean" ]
     }
   },
   "errorMessage": {
