@@ -161,14 +161,12 @@ function loader (css, map, meta) {
           * In it's original form the mappings to view the file would work
           * But not edit. Plus the urls would double up
           *
-          * @example style-loader!css-loader?importLoaders=1&sourceMap=1!postcss-loader?sourceMap=1
-          *
           * @since 2.1.6
           * @author Mat Lipe <lipemat>
           */
-          map.sources = map.sources.map((src) => {
-          	return 'file:///' + path.resolve( src );
-		  })
+          map.sources = map.sources.map( src => {
+          	return 'file:///' + path.resolve( src ).replace( /\\/g, '/' );
+	  })
         }
 
         if (!meta) {
