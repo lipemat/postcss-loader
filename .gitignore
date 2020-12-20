@@ -4,9 +4,17 @@
 ._*
 
 # NODEJS
-
 npm-debug.log
 yarn-error.log
+yarn.lock
+
+
+# Yarn berry files
+.yarn/*
+!.yarn/releases
+!.yarn/plugins
+!.yarn/sdks
+!.yarn/versions
 
 dmd
 jest
